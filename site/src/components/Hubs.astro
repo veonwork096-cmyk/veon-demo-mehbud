@@ -1,0 +1,104 @@
+---
+import FutureLink from "./FutureLink.astro";
+import Icon from "./Icon.astro";
+import Cover from "./Cover.astro";
+import { hubs, phones } from "../data/content";
+---
+<section id="napryamy" class="napr" data-rec="UX-R002" aria-labelledby="napryamy-h">
+  <div class="container napr__head">
+    <h2 id="napryamy-h" class="h2">Напрями</h2>
+    <p class="napr__intro">Що виготовляє завод і що почитати перед розмовою з ним.</p>
+  </div>
+
+  <div class="hubs">
+    {hubs.map((h) => {
+      const reads = h.cover ? h.articles.filter((a) => a !== h.cover!.title) : h.articles;
+      return (
+        <article id={h.id} class:list={["hub", `hub--${h.tone}`, h.tone !== "light" && "on-dark"]} aria-labelledby={`${h.id}-h`}>
+          <div class="container hub__in">
+            <div class="hub__main">
+              <h3 id={`${h.id}-h`} class="hub__name">{h.name}</h3>
+              <ul class="hub__makes">
+                {h.makes.map((m) => <li>{m}</li>)}
+              </ul>
+              {h.id === "metal" && <p class="hub__note">Умови для невеликих замовлень листа й профілю уточніть по телефону.</p>}
+              <div class="hub__actions">
+                <a class:list={["btn", h.tone === "light" ? "btn--ghost" : "btn--light"]} href={phones.kyiv.href}>
+                  <Icon name="phone" />{h.ask}
+                </a>
+                <FutureLink class="hub__fl">{h.product}</FutureLink>
+              </div>
+            </div>
+
+            <div class:list={["hub__side", !h.cover && "hub__side--text"]}>
+              {h.cover && (
+                <figure class="hub__fig">
+                  <Cover img={h.cover.img} alt={h.cover.title} sizes="(min-width: 1024px) 26vw, (min-width: 768px) 40vw, 100vw" ratio="4 / 3" />
+                  <figcaption><FutureLink class="hub__art hub__art--lead">{h.cover.title}</FutureLink></figcaption>
+                </figure>
+              )}
+              <div class="hub__reads">
+                <p class="hub__reads-h">Почитати</p>
+                <ul class="hub__list">
+                  {reads.map((a, i) => (
+                    <li class:list={["hub__item", h.cover && i > 0 && "hub__item--extra"]}><FutureLink class="hub__art">{a}</FutureLink></li>
+                  ))}
+                </ul>
+                <FutureLink class="hub__all">Усі статті: {h.name}</FutureLink>
+              </div>
+            </div>
+          </div>
+        </article>
+      );
+    })}
+  </div>
+</section>
+
+<style>
+  .napr { padding-top: var(--space-6); }
+  .napr__head { display: grid; gap: var(--space-3); margin-bottom: var(--space-5); }
+  .napr__intro { color: var(--color-text-muted); font-size: var(--fs-21); line-height: 1.4; max-width: 40ch; }
+  .hubs { display: grid; gap: var(--seam); }
+  .hub { padding-block: var(--space-6); }
+  .hub--primary { background: var(--color-primary); color: var(--color-on-primary); }
+  .hub--dark { background: var(--color-dark-2); color: var(--color-on-primary); }
+  .hub--light { background: var(--color-surface); color: var(--color-text); box-shadow: inset 0 var(--seam) 0 var(--color-metal); }
+  .hub__in { display: grid; gap: var(--space-5); }
+  .hub__name { font-size: var(--fs-hub); font-weight: 800; letter-spacing: -0.02em; line-height: 1; font-variation-settings: "SHRP" 50; }
+  .hub__makes { margin-top: var(--space-4); display: grid; gap: var(--space-2); font-size: var(--fs-17); max-width: 46ch; }
+  .hub__makes li { padding-left: var(--space-4); position: relative; }
+  .hub__makes li::before { content: ""; position: absolute; left: 0; top: .7em; width: var(--space-3); height: 2px; background: currentColor; opacity: .6; }
+  .hub__note { margin-top: var(--space-3); color: var(--color-text-muted); font-size: var(--fs-14); }
+  .hub__actions { margin-top: var(--space-5); display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-3) var(--space-4); }
+  .hub--primary .hub__actions :global(.btn--light) { color: var(--color-primary); }
+  .hub--dark .hub__actions :global(.btn--light) { color: var(--color-dark-2); }
+
+  .hub__side { display: grid; gap: var(--space-4); align-content: start; }
+  .hub__fig { margin: 0; display: grid; gap: var(--space-3); }
+  .hub__reads-h { font-size: var(--fs-14); color: var(--color-primary-muted); margin-bottom: var(--space-2); }
+  .hub--light .hub__reads-h { color: var(--color-text-muted); }
+  .hub__list { display: grid; }
+  .hub__item { border-top: 1px solid color-mix(in srgb, currentColor 28%, transparent); }
+  .hub__item--extra { display: none; }
+  .hub :global(.hub__art) { display: flex; padding-block: var(--space-3); font-weight: 600; font-size: var(--fs-17); line-height: 1.35; text-decoration: none; transition: transform var(--dur-fast) var(--ease-out); }
+  .hub :global(.hub__art--lead) { padding-block: 0; font-size: var(--fs-17); }
+  .hub :global(.hub__all), .hub :global(.hub__fl) { font-size: var(--fs-14); font-weight: 600; }
+  .hub :global(.hub__art:active) { transform: translateX(4px); transition-duration: 120ms; }
+  @media (hover: hover) {
+    .hub :global(.hub__art:hover) { transform: translateX(var(--seam)); }
+  }
+
+  @media (min-width: 768px) {
+    .hub { padding-block: var(--space-7); }
+    .hub__item--extra { display: block; }
+    .hub__side { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: var(--space-5); }
+    .hub__side--text { grid-template-columns: minmax(0, 1fr); }
+  }
+  @media (min-width: 1024px) {
+    .napr__head { grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); align-items: end; }
+    .hub__in { grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: var(--space-6); }
+    .hub__side { grid-template-columns: minmax(0, 3fr) minmax(0, 4fr); }
+    .hub__side--text { grid-template-columns: minmax(0, 1fr); max-width: 560px; }
+    .hub--light { padding-block: var(--space-6); }
+  }
+</style>

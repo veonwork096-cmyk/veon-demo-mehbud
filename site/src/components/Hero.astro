@@ -1,0 +1,139 @@
+---
+import Icon from "./Icon.astro";
+import { phones } from "../data/content";
+// H1 (exact text from veon-concept) split into lamellas: 4 lines from 768 px, 6 pieces below.
+const lines: string[][] = [
+  ["Фасади, стелі й"],
+  ["паркани", "з металу —"],
+  ["пояснює завод,"],
+  ["який їх", "виготовляє"],
+];
+let piece = 0;
+const entries = [
+  { href: "#fasadi", name: "Фасади", what: "касетні, рейкові, жалюзійні НВФ", tone: "dark" },
+  { href: "#steli", name: "Стелі", what: "рейкові, кубоподібні, Т-подібні", tone: "primary" },
+  { href: "#parkany", name: "Паркани", what: "«Ексклюзив Лего», «Ранчо», «Жалюзі»", tone: "metal" },
+  { href: "#metal", name: "Метал і профілі", what: "сталь у кольорах RAL, профілі за ескізом", tone: "zinc" },
+];
+---
+<section id="top" class="hero" data-rec="UX-R001,G-R006">
+  <div class="hero__in container">
+    <h1 class="hero__h1" data-rec="SEO-R003">
+      {lines.map((ln, li) => (
+        <span class="ln" style={`--li:${li}`}>
+          {ln.map((p, pi) => (
+            <>{pi > 0 && " "}<span class="pc" style={`--pi:${piece++}`}>{p}</span></>
+          ))}
+        </span>
+      ))}
+    </h1>
+
+    <div class="hero__row">
+      <div class="hero__text">
+        <p class="hero__lead">Завод «Мехбуд» розповідає про те, що робить сам: навісні фасади, підвісні стелі, паркани й гнуті профілі.</p>
+        <p class="hero__slogan">Ми робимо країну красивою!</p>
+      </div>
+      <div class="hero__cta">
+        <a class="btn btn--primary hero__call" href={phones.kyiv.href} data-rec="UX-R003">
+          <Icon name="phone" />Зателефонувати <span class="hero__num">{phones.kyiv.label}</span>
+        </a>
+        <a class="btn btn--ghost" href="#napryamy">Обрати напрям</a>
+      </div>
+    </div>
+
+    <nav class="entries" aria-label="Напрями заводу">
+      <ul class="entries__list">
+        {entries.map((e, i) => (
+          <li>
+            <a class:list={["entry", `entry--${e.tone}`]} href={e.href} style={`--ei:${i}`}>
+              <span class="entry__name">{e.name}</span>
+              <span class="entry__what">{e.what}</span>
+              <Icon name="arrow" class="entry__arrow" />
+            </a>
+          </li>
+        ))}
+      </ul>
+    </nav>
+  </div>
+</section>
+
+<script>
+  // Once the lamellas are in place, drop the entrance animation so it never replays (resize, print, capture).
+  const hero = document.getElementById("top");
+  window.setTimeout(() => hero?.classList.add("is-settled"), 1400);
+</script>
+
+<style>
+  .hero { padding-block: var(--space-4) var(--space-5); }
+  .hero__in { display: flex; flex-direction: column; gap: var(--space-4); }
+
+  /* H1 on lamellas */
+  .hero__h1 { font-family: var(--font-display); font-weight: 800; font-size: var(--fs-display-sm); line-height: 1; letter-spacing: -0.02em; font-variation-settings: "SHRP" 50; color: var(--color-on-primary); }
+  .ln { display: contents; }
+  .pc, .ln { position: relative; isolation: isolate; }
+  .pc { display: block; width: fit-content; max-width: 100%; background: var(--color-primary); padding: .1em .22em .14em; margin-top: var(--seam); }
+  .pc:first-child { margin-top: 0; }
+  .ln:not(:first-child) .pc:first-child { margin-top: var(--seam); }
+  .pc::before { content: ""; position: absolute; inset: 0; z-index: -1; background: var(--color-metal); transform: scaleX(0); transform-origin: right center; }
+
+  .hero__row { display: grid; gap: var(--space-4); }
+  .hero__lead { font-size: var(--fs-17); line-height: 1.45; max-width: 44ch; color: var(--color-text); }
+  .hero__slogan { margin-top: var(--space-2); font-weight: 400; color: var(--color-text-muted); }
+  .hero__cta { display: grid; gap: var(--space-3); }
+  .hero__num { display: none; }
+
+  .entries__list { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--seam); }
+  .entry { position: relative; display: flex; flex-direction: column; gap: var(--space-1); height: 100%; min-height: 88px; padding: var(--space-3) var(--space-6) var(--space-3) var(--space-3); text-decoration: none; transition: transform var(--dur-fast) var(--ease-out), background-color var(--dur-fast) var(--ease-out); }
+  .entry__name { font-family: var(--font-display); font-weight: 800; font-size: var(--fs-21); line-height: 1.1; }
+  .entry__what { font-size: var(--fs-14); line-height: 1.35; }
+  .entry :global(.entry__arrow) { position: absolute; right: var(--space-3); top: var(--space-3); transition: transform var(--dur-fast) var(--ease-out); }
+  .entry--dark { background: var(--color-dark-2); color: var(--color-on-primary); }
+  .entry--dark .entry__what { color: var(--color-primary-muted); }
+  .entry--primary { background: var(--color-primary); color: var(--color-on-primary); }
+  .entry--primary .entry__what { color: var(--color-primary-muted); }
+  .entry--metal { background: var(--color-metal); color: var(--color-text); }
+  .entry--zinc { background: var(--color-surface); color: var(--color-text); box-shadow: inset 0 0 0 2px var(--color-metal); }
+  .entry--zinc .entry__what { color: var(--color-text-muted); }
+  .entry:active { transform: translateX(4px); transition-duration: 120ms; }
+  @media (hover: hover) {
+    .entry:hover { transform: translateX(var(--seam)); }
+    .entry:hover :global(.entry__arrow) { transform: translateX(4px); }
+  }
+
+  @media (min-width: 768px) {
+    .hero { padding-block: var(--space-6) var(--space-6); }
+    .hero__in { gap: var(--space-5); }
+    .hero__h1 { font-size: var(--fs-display); line-height: .98; }
+    .ln { display: block; width: fit-content; max-width: 100%; background: var(--color-primary); padding: .08em .2em .12em; }
+    .ln + .ln { margin-top: var(--seam); }
+    .ln::before { content: ""; position: absolute; inset: 0; z-index: -1; background: var(--color-metal); transform: scaleX(0); transform-origin: right center; }
+    .pc, .ln:not(:first-child) .pc:first-child { display: inline; background: none; padding: 0; margin: 0; }
+    .pc::before { content: none; }
+    .hero__cta { display: flex; flex-wrap: wrap; gap: var(--space-3); }
+    .hero__num { display: inline; }
+    .entry { min-height: 96px; padding: var(--space-4) var(--space-7) var(--space-4) var(--space-4); }
+    .entry__name { font-size: var(--fs-card); }
+    .entry__what { font-size: var(--fs-17); }
+    .entry :global(.entry__arrow) { right: var(--space-4); top: var(--space-4); }
+  }
+  @media (min-width: 1024px) {
+    .hero__row { grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); align-items: center; gap: var(--space-4); }
+    .hero__cta { justify-content: flex-start; }
+    .entries__list { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+    .hero { min-height: calc(100svh - var(--header-h)); display: flex; flex-direction: column; padding-block: var(--space-4) var(--space-4); }
+    .hero__in { flex: 1; justify-content: space-between; gap: var(--space-4); }
+  }
+
+  /* Effect 1: lamellas are "painted" in place — metal underlay sweeps off, text visible from the first frame. */
+  @media (prefers-reduced-motion: no-preference) {
+    :global(.js) .pc::before { animation: paint var(--dur) var(--ease-out) backwards; animation-delay: calc(var(--pi) * var(--stagger)); }
+    :global(.js) .entry { animation: wipe var(--dur) var(--ease-out) backwards; animation-delay: calc((4 + var(--ei)) * var(--stagger)); }
+    @media (min-width: 768px) {
+      :global(.js) .pc::before { animation: none; }
+      :global(.js) .ln::before { animation: paint var(--dur) var(--ease-out) backwards; animation-delay: calc(var(--li) * var(--stagger)); }
+    }
+  }
+  :global(.js) .hero.is-settled .pc::before, :global(.js) .hero.is-settled .ln::before, :global(.js) .hero.is-settled .entry { animation: none; }
+  @keyframes paint { from { transform: scaleX(1); } to { transform: scaleX(0); } }
+  @keyframes wipe { from { clip-path: inset(0 100% 0 0); } to { clip-path: inset(0 0 0 0); } }
+</style>

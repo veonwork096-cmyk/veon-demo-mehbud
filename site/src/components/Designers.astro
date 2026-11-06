@@ -1,0 +1,70 @@
+---
+import FutureLink from "./FutureLink.astro";
+import Icon from "./Icon.astro";
+import { forDesigners, guarantees, phones, email } from "../data/content";
+const tz = `${email.href}?subject=${encodeURIComponent("ТЗ / креслення")}`;
+---
+<section id="proektuvalnykam" class="dsg section-pad on-dark" data-rec="UX-R007" aria-labelledby="dsg-h">
+  <div class="container dsg__in">
+    <div class="dsg__main">
+      <h2 id="dsg-h" class="h2">Для проєктувальників і забудовників</h2>
+      <p class="dsg__intro">Що завод бере на себе в проєкті:</p>
+      <ul class="dsg__list">
+        {forDesigners.map((f) => <li>{f}</li>)}
+      </ul>
+      <div class="dsg__actions">
+        <a class="btn btn--light" href={tz}><Icon name="mail" />Надіслати ТЗ або креслення</a>
+        <a class="btn btn--ghost-light" href={phones.kyiv.href}><Icon name="phone" />{phones.kyiv.label}</a>
+      </div>
+      <p class="dsg__fl"><FutureLink>Розділ для проєктувальників</FutureLink></p>
+    </div>
+
+    <div class="dsg__data">
+      <h3 class="dsg__h3">Гарантії на покриття, років</h3>
+      <ul class="g" data-inview>
+        {guarantees.map((g, i) => (
+          <li class="g__item" style={`--v:${g.years}; --gi:${i}`}>
+            <p class="g__name">{g.name}<span class="visually-hidden">: гарантія {g.prefix}{g.years} років</span></p>
+            <div class="g__row" aria-hidden="true">
+              <span class="g__bar"></span>
+              <span class="g__num">{g.prefix && <small class="g__pre">від</small>}{g.years}</span>
+            </div>
+          </li>
+        ))}
+      </ul>
+    </div>
+  </div>
+</section>
+
+<style>
+  .dsg { background: var(--color-dark-2); color: var(--color-on-primary); margin-top: var(--seam); }
+  .dsg__in { display: grid; gap: var(--space-7); }
+  .dsg__intro { margin-top: var(--space-4); color: var(--color-primary-muted); font-size: var(--fs-21); }
+  .dsg__list { margin-top: var(--space-4); display: grid; gap: var(--seam); }
+  .dsg__list li { background: var(--color-dark-2-hover); padding: var(--space-3) var(--space-4); font-weight: 600; box-shadow: inset 4px 0 0 var(--color-metal); }
+  .dsg__actions { margin-top: var(--space-5); display: flex; flex-wrap: wrap; gap: var(--space-3); }
+  .dsg__actions :global(.btn--light) { color: var(--color-dark-2); }
+  .dsg__fl { margin-top: var(--space-3); font-size: var(--fs-14); }
+
+  .dsg__h3 { font-size: var(--fs-card); }
+  .g { margin-top: var(--space-5); display: grid; gap: var(--space-5); }
+  .g__name { font-weight: 400; color: var(--color-primary-muted); }
+  .g__row { display: grid; grid-template-columns: calc((100% - 2.6em) * var(--v) / 30) auto; align-items: center; gap: var(--space-3); font-size: var(--fs-figure); margin-top: var(--space-2); }
+  .g__bar { display: block; height: .62em; background: var(--color-metal); transform-origin: left center; transition: transform 900ms var(--ease-out); transition-delay: calc(var(--gi) * 120ms); }
+  .g__num { font-family: var(--font-display); font-weight: 800; line-height: .9; letter-spacing: -0.03em; font-variation-settings: "SHRP" 50; }
+  .g__pre { font-family: var(--font-body); font-size: var(--fs-21); font-weight: 400; letter-spacing: 0; margin-right: var(--space-2); color: var(--color-primary-muted); }
+
+  /* Effect 3: bars grow to their length once, when the block enters the viewport (reveal.ts adds .is-visible). */
+  @media (prefers-reduced-motion: no-preference) {
+    :global(.js) .g:not(.is-visible) .g__bar { transform: scaleX(0); }
+  }
+  @media (max-width: 767px) {
+    .g__bar { transition-duration: 600ms; }
+  }
+  .g.is-settled .g__bar { transition: none; }
+
+  @media (min-width: 1024px) {
+    .dsg__in { grid-template-columns: minmax(0, 6fr) minmax(0, 6fr); gap: var(--space-6); align-items: start; }
+    .dsg__data { padding-top: var(--space-2); }
+  }
+</style>

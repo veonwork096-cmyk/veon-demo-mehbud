@@ -1,0 +1,64 @@
+/* Base: reset, accessibility, fluid layout helpers + shared client components (buttons, FutureLink, headings). Values only via tokens.css. */
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
+html, body { overflow-x: clip; }
+body { margin: 0; background: var(--color-bg); color: var(--color-text); font-family: var(--font-body); font-size: var(--fs-17); line-height: 1.55; text-rendering: optimizeLegibility; }
+img, video, svg { display: block; max-width: 100%; height: auto; }
+h1, h2, h3 { overflow-wrap: break-word; min-width: 0; text-wrap: balance; margin: 0; font-family: var(--font-display); font-weight: 800; line-height: 1.08; }
+p { text-wrap: pretty; margin: 0; }
+ul, ol { margin: 0; padding: 0; list-style: none; }
+a { color: inherit; }
+button, input, select, textarea { font: inherit; color: inherit; }
+:focus-visible { outline: 3px solid var(--color-focus-outer); outline-offset: 2px; transition: none; }
+/* Dark bands: light ring */
+.on-dark :focus-visible, .on-dark:focus-visible { outline-color: var(--color-focus-inner); }
+.skip-link { position: absolute; left: var(--space-3); top: -100px; z-index: 100; padding: var(--space-2) var(--space-3); background: var(--color-text); color: var(--color-bg); }
+.skip-link:focus { top: var(--space-3); }
+::selection { background: var(--color-primary); color: var(--color-on-primary); }
+html { scrollbar-color: var(--color-dark-2) var(--color-bg); }
+.container { width: min(100% - 2 * var(--gutter), var(--container)); margin-inline: auto; }
+.visually-hidden { position: absolute !important; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+/* Section heading */
+.h2 { font-size: var(--fs-h2); font-weight: 800; letter-spacing: -0.015em; line-height: 1.02; }
+.section-pad { padding-block: var(--section-y); }
+.section-pad--tight-end { padding-bottom: var(--space-6); }
+
+/* Buttons */
+.btn { white-space: nowrap; display: inline-flex; align-items: center; justify-content: center; gap: var(--space-2); min-height: var(--btn-h); padding: 0 var(--space-4); border-radius: var(--radius); border: 2px solid transparent; font-family: var(--font-body); font-weight: 600; font-size: var(--fs-17); line-height: 1.2; text-decoration: none; cursor: pointer; transition: background-color var(--dur-fast) var(--ease-out), border-color var(--dur-fast) var(--ease-out), color var(--dur-fast) var(--ease-out), transform 120ms var(--ease-out); }
+.btn:active { transform: translateY(1px); }
+.btn svg { width: 20px; height: 20px; flex: none; }
+.btn--primary { background: var(--color-accent); color: var(--color-accent-ink); }
+.btn--primary:hover { background: var(--color-accent-hover); }
+.btn--ghost { background: transparent; border-color: var(--color-text); color: var(--color-text); }
+.btn--ghost:hover { background: var(--color-text); color: var(--color-bg); }
+.btn--light { background: var(--color-on-primary); color: var(--color-primary); }
+.btn--light:hover { background: var(--color-bg); }
+.btn--ghost-light { background: transparent; border-color: var(--color-on-primary); color: var(--color-on-primary); }
+.btn--ghost-light:hover { background: var(--color-on-primary); color: var(--color-primary); }
+
+/* Disabled controls (demo form): dashed, not clickable */
+.btn:disabled, .btn[aria-disabled="true"] { background: transparent; color: var(--color-text-muted); border: 2px dashed var(--color-text-muted); cursor: not-allowed; }
+.btn:disabled:active, .btn[aria-disabled="true"]:active { transform: none; }
+
+/* Text link with real action */
+.link { text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: .2em; transition: text-decoration-color var(--dur-fast) var(--ease-out); }
+.link:hover { text-decoration-thickness: 2px; }
+
+/* Reveal-on-scroll hook (src/scripts/reveal.ts). Hidden only once scripting runs. Effects are defined in components. */
+[data-reveal] { transition: opacity var(--dur) var(--ease-out), transform var(--dur) var(--ease-out); transition-delay: var(--reveal-delay, 0ms); }
+.js [data-reveal]:not(.is-visible) { opacity: 0; transform: translateY(24px); }
+[id] { scroll-margin-top: var(--header-h, 0px); }
+
+/* FutureLink: inactive item for a page that is not built yet (dashed underline + note on hover/focus). */
+.future-link { position: relative; display: inline-flex; align-items: center; justify-content: center; min-width: var(--tap-min); cursor: default; text-decoration: underline dashed; text-decoration-thickness: 1px; text-underline-offset: .25em; min-height: var(--tap); }
+.future-link__note[aria-hidden="true"] { position: absolute; left: 0; top: calc(100% - .25rem); transform: translateY(-4px); white-space: nowrap; padding: .4rem .6rem; font-family: var(--font-body); font-size: var(--fs-14); font-weight: 400; line-height: 1.2; letter-spacing: 0; text-transform: none; background: var(--color-text); color: var(--color-bg); border-radius: var(--radius); opacity: 0; pointer-events: none; transition: opacity var(--dur-fast) var(--ease-out), transform var(--dur-fast) var(--ease-out); z-index: 30; }
+.future-link:hover .future-link__note, .future-link:focus-visible .future-link__note { opacity: 1; transform: translateY(0); }
+.future-link:focus-visible { outline: 3px solid var(--color-focus-outer); outline-offset: 2px; }
+.on-dark .future-link:focus-visible { outline-color: var(--color-focus-inner); }
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; animation-delay: 0ms !important; transition-duration: .01ms !important; transition-delay: 0ms !important; }
+  .js [data-reveal]:not(.is-visible) { opacity: 1; transform: none; }
+}

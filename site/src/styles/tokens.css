@@ -1,0 +1,114 @@
+/* Hallmark · shape: lamella bands top → napryamy → statti → proektuvalnykam → kontakty · genre: modern-minimal · theme: custom · job: hire · idea: "Один лист — три системи: сторінка з металевих ламелей зі швом, як вироби заводу" · vibe: "заводська точність, металевий лист, сигнал дії"
+ * paper: #E4E8E9 · accent: #C42A1E · display: Geologica · body: Onest · hero: H1 на синіх ламелях з рваним краєм, CTA tel, 4 ламелі-входи, без фото · nav: синя ламель, якорі + tel · footer: синя ламель з логотипом і контактами + світла смуга з трьох груп: якорі розділів, рядок рубрик і продукції (FL), соцмережі · imagery: client article covers · signature: заголовок на ламелях і напрями «парканом»
+ * axes: mid/geometric-sans/chromatic-red · posture: committed · contrast: pass · fold: pass · v2.0.0 */
+/* Hallmark · pre-emit critique: P4 H4 E4 S4 R4 V3 · weakest: V (imagery), no confirmed photos of own objects — the first screen is typography on lamellas, only client article covers are used below it */
+/* Hallmark · waive 72 · span.ln side padding 0.2em · H1 lamellas are cut tight to the line like sheet profiles, the signature of the approved concept */
+/* Hallmark · waive 39b · a.btn 56px · concept sets 56 px buttons (CTA full width on 390, tap target for phone calls in the field) */
+/* Hallmark · waive 59 · gaps 56px before footer and between lamella bands · finish-review asked to remove double zinc gaps; lamella bands meet with an 8px seam by concept */
+/* Client design tokens: from design/concept.md (veon-concept: colors, fonts). */
+@font-face {
+  font-family: "Geologica";
+  font-style: normal;
+  font-display: swap;
+  font-weight: 100 900;
+  src: url("/fonts/geologica-cyrillic-shrp-normal.woff2") format("woff2");
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+@font-face {
+  font-family: "Geologica";
+  font-style: normal;
+  font-display: swap;
+  font-weight: 100 900;
+  src: url("/fonts/geologica-latin-shrp-normal.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+@font-face {
+  font-family: "Onest";
+  font-style: normal;
+  font-display: swap;
+  font-weight: 100 900;
+  src: url("/fonts/onest-cyrillic-wght-normal.woff2") format("woff2");
+  unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+@font-face {
+  font-family: "Onest";
+  font-style: normal;
+  font-display: swap;
+  font-weight: 100 900;
+  src: url("/fonts/onest-latin-wght-normal.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+:root {
+  /* colour roles */
+  --color-bg: #E4E8E9;            /* zinc, unpainted galvanised sheet */
+  --color-surface: #F6F7F7;
+  --color-text: #14191E;
+  --color-text-muted: #4D5862;
+  --color-primary: #0F2E4A;       /* brand navy */
+  --color-on-primary: #F7F9FA;
+  --color-primary-muted: #B9C6D0; /* secondary text on dark */
+  --color-dark-2: #373F45;        /* anthracite, close to RAL 7016 */
+  --color-metal: #A9B1B6;         /* aluminium, close to RAL 9006: seams, data bars */
+  --color-accent: #C42A1E;        /* signal red, close to RAL 3020: action only */
+  --color-accent-hover: #A92319;
+  --color-accent-ink: #F7F9FA;
+  --color-accent-on-dark: #FF6B5A;
+  --color-primary-hover: #163B5E;
+  --color-dark-2-hover: #414A51;
+  --color-focus-inner: #F7F9FA;
+  --color-focus-outer: #0F2E4A;
+
+  /* type */
+  --font-display: "Geologica", system-ui, sans-serif;
+  --font-body: "Onest", system-ui, sans-serif;
+  --fs-14: 0.875rem;
+  --fs-17: 1.0625rem;
+  --fs-21: 1.3125rem;
+  --fs-card: clamp(1.5rem, 1.2rem + 0.9vw, 2rem);
+  --fs-h2: clamp(2rem, 1.35rem + 2.2vw, 3.25rem);
+  --fs-hub: clamp(2.5rem, 1.6rem + 2.6vw, 4rem);
+  --fs-figure: clamp(4rem, 2.6rem + 3.6vw, 6rem);
+  --fs-display-sm: 9.2vw;                          /* < 768: six lamellas */
+  --fs-display: clamp(3.5rem, 7vw, 6rem);       /* >= 768: four lamellas */
+
+  /* lamella module */
+  --seam: 8px;
+  --radius: 2px;
+  --radius-lamella: 0;
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 16px;
+  --space-4: 24px;
+  --space-5: 32px;
+  --space-6: 48px;
+  --space-7: 72px;
+  --space-8: 96px;
+  --space-9: 128px;
+  --section-y: var(--space-7);
+  --gutter: 20px;
+  --space: var(--gutter);
+  --container: 1360px;
+  --header-h: 64px;
+  --tap: 48px;
+  --tap-min: 44px;
+  --btn-h: 56px;
+
+  /* motion */
+  --ease-out: cubic-bezier(.2, .7, .2, 1);
+  --dur: 600ms;
+  --dur-fast: 200ms;
+  --stagger: 70ms;
+}
+@media (min-width: 768px) {
+  :root { --gutter: 40px; --section-y: var(--space-8); }
+}
+@media (min-width: 1024px) {
+  :root { --header-h: 72px; }
+}
+@media (min-width: 1280px) {
+  :root { --gutter: 64px; --section-y: var(--space-9); }
+}
+@media (max-width: 767px) {
+  :root { --dur: 450ms; --stagger: 50ms; }
+}

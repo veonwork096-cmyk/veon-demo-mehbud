@@ -1,0 +1,122 @@
+---
+import Icon from "./Icon.astro";
+import { phones, email, offices, experts, mapHref, messengers } from "../data/content";
+---
+<section id="kontakty" class="kt section-pad section-pad--tight-end" data-rec="UX-R003" aria-labelledby="kt-h">
+  <div class="container">
+    <h2 id="kt-h" class="h2 kt__h">Кому дзвонити і де подивитися</h2>
+
+    <div class="kt__in">
+      <div class="kt__cities">
+        <div class="city city--main on-dark">
+          <h3 class="city__name">Київ</h3>
+          <p class="city__role">Головний офіс і виставковий майданчик</p>
+          <ul class="city__phones">
+            <li><a class="city__tel" href={phones.kyiv.href}>{phones.kyiv.label}</a></li>
+            <li><a class="city__tel" href={phones.kyivMobile.href}>{phones.kyivMobile.label}</a></li>
+            <li><a class="city__tel city__mail" href={email.href}>{email.label}</a></li>
+          </ul>
+          <ul class="city__msg" aria-label="Месенджери" data-rec="UX-R009">
+            {messengers.map((m) => <li><a class="btn btn--ghost-light city__msg-a" href={m.href} target="_blank" rel="noopener noreferrer">{m.name}</a></li>)}
+          </ul>
+          <address class="city__addr">вул. Академіка Кримського, 4а, офіс 104 (м. Академмістечко)</address>
+          <p class="city__hours">Пн–Пт 09:00–18:00</p>
+          <a class="link city__map" href={mapHref} target="_blank" rel="noopener noreferrer"><Icon name="pin" size={18} />Майданчик на мапі</a>
+        </div>
+
+        <ul class="kt__offices">
+          {offices.map((o) => (
+            <li class="city">
+              <h3 class="city__name city__name--sm">{o.city}</h3>
+              <p class="city__role">{o.note}</p>
+              <a class="city__tel city__tel--sm" href={o.phone.href}>{o.phone.label}</a>
+              <address class="city__addr">{o.address}</address>
+            </li>
+          ))}
+        </ul>
+
+        <p class="kt__experts">
+          Експерти за напрямами:
+          {experts.map((e, i) => <>{i > 0 && "; "}{e.area} — <strong>{e.name}</strong></>)}.
+        </p>
+      </div>
+
+      <form class="form" aria-labelledby="form-h" novalidate>
+        <h3 id="form-h" class="form__h">Опишіть об'єкт</h3>
+        <div class="form__field">
+          <label for="f-dir">Напрям</label>
+          <select id="f-dir" name="direction">
+            <option>Фасади</option>
+            <option>Стелі</option>
+            <option>Паркани</option>
+            <option>Метал і профілі</option>
+            <option>Інше</option>
+          </select>
+        </div>
+        <div class="form__field">
+          <label for="f-tel">Телефон</label>
+          <input id="f-tel" name="phone" type="tel" autocomplete="tel" inputmode="tel" placeholder="+380" />
+        </div>
+        <div class="form__field">
+          <label for="f-msg">Коротко про об'єкт <span class="form__opt">(необов'язково)</span></label>
+          <textarea id="f-msg" name="message" rows="4"></textarea>
+        </div>
+        <button class="btn form__btn" type="button" aria-disabled="true" aria-describedby="form-note">Надіслати</button>
+        <p id="form-note" class="form__note">Онлайн-заявка з'явиться в повній версії сайту. Зараз швидше так:</p>
+        <div class="form__real">
+          <a class="btn btn--primary" href={phones.kyiv.href}><Icon name="phone" />{phones.kyiv.label}</a>
+          <a class="link form__mail" href={email.href}><Icon name="mail" size={18} />{email.label}</a>
+        </div>
+      </form>
+    </div>
+  </div>
+</section>
+
+<style>
+  .kt__h { max-width: 18ch; }
+  .kt__in { margin-top: var(--space-5); display: grid; gap: var(--space-6); }
+  .kt__cities { display: grid; gap: var(--seam); align-content: start; }
+  .city { background: var(--color-surface); padding: var(--space-4) var(--space-3); display: grid; gap: var(--space-1); align-content: start; }
+  .city--main { background: var(--color-primary); color: var(--color-on-primary); padding: var(--space-5) var(--space-4); gap: var(--space-2); }
+  .city__name { font-size: var(--fs-h2); font-weight: 800; letter-spacing: -0.02em; line-height: 1; }
+  .city__name--sm { font-size: var(--fs-card); }
+  .city__role { font-size: var(--fs-14); color: var(--color-text-muted); }
+  .city--main .city__role, .city--main .city__hours { color: var(--color-primary-muted); }
+  .city__phones { display: grid; margin-block: var(--space-2); }
+  .city__tel { display: inline-flex; align-items: center; min-height: var(--tap); font-family: var(--font-display); font-weight: 800; font-size: var(--fs-card); text-decoration: none; letter-spacing: -0.01em; }
+  .city__tel:hover { text-decoration: underline; text-underline-offset: .15em; }
+  .city__mail { font-size: var(--fs-21); white-space: nowrap; }
+  .city__tel--sm { font-size: var(--fs-17); white-space: nowrap; }
+  .city__addr { font-style: normal; }
+  .city__msg { display: flex; flex-wrap: wrap; gap: var(--space-2); margin-bottom: var(--space-3); }
+  .city__msg-a { min-height: var(--tap); padding: 0 var(--space-3); font-size: var(--fs-17); }
+  .city__map { display: inline-flex; align-items: center; gap: var(--space-2); min-height: var(--tap); font-weight: 600; }
+  .kt__offices { display: grid; gap: var(--seam); }
+  .kt__experts { margin-top: var(--space-3); color: var(--color-text-muted); font-size: var(--fs-14); }
+  .kt__experts strong { color: var(--color-text); font-weight: 600; }
+
+  .form { background: var(--color-surface); padding: var(--space-5) var(--space-4); display: grid; gap: var(--space-4); align-content: start; box-shadow: inset 0 var(--seam) 0 var(--color-metal); }
+  .form__h { font-size: var(--fs-card); }
+  .form__field { display: grid; gap: var(--space-2); }
+  .form__field label { font-weight: 400; }
+  .form__opt { color: var(--color-text-muted); font-weight: 400; }
+  .form select, .form input, .form textarea { width: 100%; min-height: var(--btn-h); padding: var(--space-3); background: var(--color-surface); border: 1px solid var(--color-text-muted); border-radius: var(--radius); font-size: var(--fs-17); transition: border-color var(--dur-fast) var(--ease-out); }
+  .form textarea { resize: vertical; min-height: 120px; }
+  .form select:hover, .form input:hover, .form textarea:hover { border-color: var(--color-text); }
+  .form__btn { background: transparent; color: var(--color-text-muted); border: 2px dashed var(--color-text-muted); cursor: not-allowed; }
+  .form__btn:active { transform: none; }
+  .form__note { font-size: var(--fs-14); color: var(--color-text-muted); margin-top: calc(-1 * var(--space-2)); }
+  .form__real { display: grid; gap: var(--space-3); }
+  .form__mail { display: inline-flex; align-items: center; gap: var(--space-2); min-height: var(--tap); font-weight: 600; font-size: var(--fs-17); white-space: nowrap; }
+
+  @media (min-width: 768px) {
+    .kt__offices { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .city--main { padding: var(--space-6) var(--space-5); }
+    .city__phones { grid-template-columns: repeat(2, max-content); gap: 0 var(--space-5); }
+    .city__phones li:last-child { grid-column: 1 / -1; }
+  }
+  @media (min-width: 1024px) {
+    .kt__in { grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); gap: var(--space-5); }
+    .form { padding: var(--space-5); }
+  }
+</style>

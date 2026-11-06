@@ -1,0 +1,138 @@
+---
+import FutureLink from "./FutureLink.astro";
+import Icon from "./Icon.astro";
+import { phones, email } from "../data/content";
+const nav = [
+  { href: "#napryamy", label: "Напрями" },
+  { href: "#statti", label: "Статті" },
+  { href: "#proektuvalnykam", label: "Проєктувальникам" },
+  { href: "#kontakty", label: "Контакти" },
+];
+const more = ["Новини", "Корисне", "Сад і город"];
+---
+<header class="hdr on-dark" data-rec="UX-R003">
+  <div class="hdr__in container">
+    <a class="hdr__logo" href="#top" aria-label="Мехбуд, на початок сторінки">
+      <img src="/img/logo-mehbud.png" width="105" height="59" alt="Мехбуд" fetchpriority="high" />
+    </a>
+
+    <nav class="hdr__nav" aria-label="Основне меню">
+      <ul class="hdr__list">
+        {nav.map((n) => <li><a class="hdr__link" href={n.href}>{n.label}</a></li>)}
+        <li>
+          <details class="more">
+            <summary class="hdr__link more__sum">Ще <Icon name="arrow-down" size={16} /></summary>
+            <ul class="more__panel">
+              {more.map((m) => <li><FutureLink>{m}</FutureLink></li>)}
+            </ul>
+          </details>
+        </li>
+      </ul>
+    </nav>
+
+    <div class="hdr__tools">
+      <FutureLink class="hdr__icon hdr__search"><Icon name="search" /><span class="visually-hidden">Пошук по статтях</span></FutureLink>
+      <ul class="hdr__lang" aria-label="Мова">
+        <li><span class="hdr__lang-cur" aria-current="true">UK</span></li>
+        <li><FutureLink>EN</FutureLink></li>
+        <li><FutureLink>RU</FutureLink></li>
+      </ul>
+      <a class="hdr__phone" href={phones.kyiv.href}><Icon name="phone" size={18} />{phones.kyiv.label}</a>
+      <a class="hdr__icon hdr__call" href={phones.kyiv.href} aria-label="Зателефонувати в Мехбуд"><Icon name="phone" /></a>
+
+      <details class="burger">
+        <summary class="hdr__icon burger__btn" aria-label="Меню">
+          <span class="burger__open"><Icon name="menu" /></span>
+          <span class="burger__close"><Icon name="close" /></span>
+        </summary>
+        <div class="burger__panel">
+          <nav aria-label="Мобільне меню">
+            <ul class="burger__list">
+              {nav.map((n) => <li><a class="burger__item" href={n.href}>{n.label}</a></li>)}
+              <li class="burger__item burger__item--muted">
+                <span>Ще:</span>
+                {more.map((m) => <FutureLink>{m}</FutureLink>)}
+              </li>
+              <li class="burger__item burger__item--muted">
+                <span aria-current="true">UK</span><FutureLink>EN</FutureLink><FutureLink>RU</FutureLink>
+              </li>
+            </ul>
+          </nav>
+          <div class="burger__contacts">
+            <a class="btn btn--primary" href={phones.kyiv.href}><Icon name="phone" />{phones.kyiv.label}</a>
+            <a class="link burger__mail" href={email.href}>{email.label}</a>
+          </div>
+        </div>
+      </details>
+    </div>
+  </div>
+</header>
+
+<script>
+  // Close the mobile menu / "Ще" after choosing an item or on Escape.
+  const menus = document.querySelectorAll<HTMLDetailsElement>(".hdr details");
+  document.querySelectorAll<HTMLAnchorElement>(".burger a[href^='#']").forEach((a) =>
+    a.addEventListener("click", () => menus.forEach((d) => (d.open = false)))
+  );
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") menus.forEach((d) => { if (d.open) { d.open = false; d.querySelector("summary")?.focus(); } });
+  });
+  document.addEventListener("click", (e) => {
+    const more = document.querySelector<HTMLDetailsElement>(".more");
+    if (more?.open && !more.contains(e.target as Node)) more.open = false;
+  });
+</script>
+
+<style>
+  .hdr { position: sticky; top: 0; z-index: 50; background: var(--color-primary); color: var(--color-on-primary); height: var(--header-h); }
+  .hdr__in { height: 100%; display: flex; align-items: center; gap: var(--space-4); }
+  .hdr__logo { flex: none; display: block; background: var(--color-on-primary); border-radius: 50%; padding: 2px var(--space-2); }
+  .hdr__logo img { height: 40px; width: auto; }
+  .hdr__nav { display: none; margin-right: auto; }
+  .hdr__list { display: flex; align-items: center; gap: var(--space-1); }
+  .hdr__link { display: inline-flex; align-items: center; gap: var(--space-1); min-height: var(--tap); padding: 0 var(--space-3); color: var(--color-on-primary); text-decoration: none; font-weight: 600; font-size: var(--fs-17); cursor: pointer; transition: background-color var(--dur-fast) var(--ease-out); }
+  .hdr__link:hover { background: var(--color-primary-hover); }
+  .more { position: relative; }
+  .more__sum { list-style: none; }
+  .more__sum::-webkit-details-marker { display: none; }
+  .more__sum :global(svg) { transition: transform var(--dur-fast) var(--ease-out); }
+  .more[open] .more__sum :global(svg) { transform: rotate(180deg); }
+  .more__panel { position: absolute; top: calc(100% + var(--space-2)); left: 0; min-width: 220px; background: var(--color-surface); color: var(--color-text); padding: var(--space-2) var(--space-3); display: grid; }
+  .more__panel :global(.future-link) { width: 100%; }
+
+  .hdr__tools { margin-left: auto; display: flex; align-items: center; gap: var(--space-2); }
+  .hdr__icon, .hdr__tools :global(.hdr__search) { display: inline-flex; align-items: center; justify-content: center; width: var(--tap); height: var(--tap); min-height: var(--tap); color: var(--color-on-primary); text-decoration: none; cursor: pointer; }
+  .hdr__tools :global(.hdr__search) { display: none; text-decoration: none; }
+  .hdr__lang { display: none; align-items: center; gap: var(--space-2); font-size: var(--fs-14); font-weight: 400; }
+  .hdr__lang-cur { display: inline-flex; align-items: center; min-height: var(--tap); padding-inline: var(--space-1); border-bottom: 2px solid var(--color-on-primary); }
+  .hdr__lang :global(.future-link) { padding-inline: var(--space-1); color: var(--color-primary-muted); }
+  .hdr__phone { display: none; align-items: center; gap: var(--space-2); min-height: var(--tap); padding: 0 var(--space-3); color: var(--color-on-primary); font-weight: 600; text-decoration: none; white-space: nowrap; border: 2px solid var(--color-on-primary); border-radius: var(--radius); transition: background-color var(--dur-fast) var(--ease-out), color var(--dur-fast) var(--ease-out); }
+  .hdr__phone:hover { background: var(--color-on-primary); color: var(--color-primary); }
+  .hdr__call { background: var(--color-accent); border-radius: var(--radius); }
+  .hdr__call:hover { background: var(--color-accent-hover); }
+
+  .burger__btn { list-style: none; }
+  .burger__btn::-webkit-details-marker { display: none; }
+  .burger__close { display: none; }
+  .burger[open] .burger__open { display: none; }
+  .burger[open] .burger__close { display: inline-flex; }
+  .burger__panel { position: fixed; inset: var(--header-h) 0 0 0; background: var(--color-bg); color: var(--color-text); overflow-y: auto; padding-bottom: var(--space-6); }
+  .burger__list { display: grid; gap: var(--seam); padding-top: var(--seam); }
+  .burger__item { display: flex; align-items: center; flex-wrap: wrap; gap: var(--space-2) var(--space-4); min-height: 56px; padding: var(--space-2) var(--gutter); background: var(--color-primary); color: var(--color-on-primary); font-family: var(--font-display); font-weight: 800; font-size: var(--fs-21); text-decoration: none; }
+  .burger__item--muted { background: var(--color-surface); color: var(--color-text); font-family: var(--font-body); font-weight: 600; font-size: var(--fs-17); }
+  .burger__contacts { display: grid; gap: var(--space-3); padding: var(--space-5) var(--gutter) 0; }
+  .burger__mail { display: inline-flex; align-items: center; min-height: var(--tap); font-weight: 600; font-size: var(--fs-21); }
+
+  @media (min-width: 768px) {
+    .hdr__phone { display: inline-flex; }
+    .hdr__call { display: none; }
+  }
+  @media (min-width: 1280px) {
+    .hdr__nav + .hdr__tools { margin-left: 0; }
+    .hdr__nav { display: block; }
+    .hdr__tools :global(.hdr__search) { display: inline-flex; }
+    .hdr__lang { display: flex; }
+    .burger { display: none; }
+    .hdr__list { margin-left: var(--space-3); }
+  }
+</style>

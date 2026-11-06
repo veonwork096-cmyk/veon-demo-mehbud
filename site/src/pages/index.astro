@@ -1,0 +1,44 @@
+---
+import Base from "../layouts/Base.astro";
+import Header from "../components/Header.astro";
+import Hero from "../components/Hero.astro";
+import Hubs from "../components/Hubs.astro";
+import Articles from "../components/Articles.astro";
+import Designers from "../components/Designers.astro";
+import Contacts from "../components/Contacts.astro";
+import Footer from "../components/Footer.astro";
+import { phones, email, socials, articles } from "../data/content";
+
+const title = "Металеві фасади, стелі й паркани — блог заводу «Мехбуд»";
+const description = "Завод «Мехбуд» про навісні фасади, підвісні металеві стелі, паркани й гнуті профілі в кольорах RAL: поради, норми, монтаж. Київ, Львів, Одеса, Тернопіль.";
+
+const ld = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "HomeAndConstructionBusiness",
+      "@id": "#org",
+      name: "Завод «Мехбуд»",
+      slogan: "Ми робимо країну красивою!",
+      telephone: [phones.kyiv.label, phones.kyivMobile.label, phones.lviv.label, phones.odesa.label],
+      email: email.label,
+      address: { "@type": "PostalAddress", streetAddress: "вул. Академіка Кримського, 4а, офіс 104", addressLocality: "Київ", postalCode: "03142", addressCountry: "UA" },
+      openingHours: "Mo-Fr 09:00-18:00",
+      sameAs: socials.map((s) => s.href),
+    },
+    { "@type": "WebSite", name: "Блог заводу «Мехбуд»", inLanguage: "uk", publisher: { "@id": "#org" } },
+    { "@type": "Blog", name: "Блог заводу «Мехбуд»", inLanguage: "uk", publisher: { "@id": "#org" } },
+    { "@type": "ItemList", name: "Нові матеріали", itemListElement: articles.map((a, i) => ({ "@type": "ListItem", position: i + 1, name: a.title })) },
+  ],
+};
+---
+<Base lang="uk" title={title} description={description} mainRec="UX-R011,SEO-R002,PERF-R001,PERF-R002,PERF-R003,PERF-R004,PERF-R005">
+  <script slot="head" type="application/ld+json" set:html={JSON.stringify(ld)} />
+  <Header slot="header" />
+  <Hero />
+  <Hubs />
+  <Articles />
+  <Designers />
+  <Contacts />
+  <Footer slot="footer" />
+</Base>

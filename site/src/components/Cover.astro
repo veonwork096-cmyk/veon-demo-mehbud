@@ -1,0 +1,23 @@
+---
+// Client article cover: WebP srcset, intrinsic size, lazy below the first screen, cropped by CSS to the grid ratio.
+import { srcset, type Cover } from "../data/content";
+interface Props { img: Cover; alt: string; sizes: string; ratio?: string; eager?: boolean; class?: string; }
+const { img, alt, sizes, ratio = "3 / 2", eager = false, class: cls } = Astro.props;
+const fallback = `${img.src}-${img.widths.filter((w) => w <= img.w).at(-2) ?? img.widths[0]}.webp`;
+---
+<img
+  class:list={["cover", cls]}
+  src={fallback}
+  srcset={srcset(img)}
+  sizes={sizes}
+  width={img.w}
+  height={img.h}
+  alt={alt}
+  loading={eager ? "eager" : "lazy"}
+  decoding="async"
+  style={`aspect-ratio: ${ratio}`}
+/>
+
+<style>
+  .cover { width: 100%; height: auto; object-fit: cover; background: var(--color-metal); }
+</style>
